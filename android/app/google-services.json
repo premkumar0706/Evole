@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "829235342119",
+    "project_id": "evole-e2898",
+    "storage_bucket": "evole-e2898.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829235342119:android:990ab8d7afaa271d4f5702",
+        "android_client_info": {
+          "package_name": "com.example.evole"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBf4l-cVeTIeTvP6o0nN5QIqLP7sB5LQjk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
