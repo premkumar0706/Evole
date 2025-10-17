@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'screens/login_screen.dart';
-import 'theme/theme.dart'; 
+import 'screens/Basic_info.dart';
+import 'theme.dart';
+import 'firebase_options.dart';
 
-void main() {
+final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const EvoleApp());
 }
 
@@ -14,8 +24,25 @@ class EvoleApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'EVOLE',
-      theme: appTheme, 
-      home: const LoginScreen(),
+      theme: appTheme,
+      home: StreamBuilder<User?>(
+        stream: firebaseAuth.authStateChanges(),
+        builder: (context, AsyncSnapshot<User?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          if (snapshot.hasData) {
+            return const Home_Page();
+          }
+
+          return const LoginScreen();
+        },
+      ),
     );
   }
 }
