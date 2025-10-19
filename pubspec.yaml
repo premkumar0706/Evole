@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.9.2
+  sdk: '>=3.9.2 <4.0.0' # Updated format for Dart SDK constraint
 
 dependencies:
   flutter:
@@ -20,6 +20,23 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
 
+<<<<<<< HEAD
 flutter:
   assets:
   - assets/images/search1.png
+=======
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter: # <--- This is the only top-level 'flutter:' key
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true # Indented 2 spaces from 'flutter'
+
+  # To add assets to your application, add an assets section, like this:
+  assets: # Indented 2 spaces from 'flutter'
+    - assets/images/search1.png
+>>>>>>> 73e6db7 (Added login screen, updated theme, fixed basic info form layout)

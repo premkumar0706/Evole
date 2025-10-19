@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../constants.dart';
+import '../theme/constants.dart';
+import 'Basic_info.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,7 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool isLoading = false; 
+  bool isLoading = false;
 
   Future<UserCredential?> signInWithGoogle() async {
     setState(() {
@@ -22,7 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       if (googleUser == null) {
-        // User canceled sign-in
         setState(() {
           isLoading = false;
         });
@@ -69,8 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("EVOLE",
-                        style: Theme.of(context).textTheme.headlineLarge),
+                    Text(
+                      "EVOLE",
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
                     const SizedBox(height: 8),
                     Text(
                       "Explore Learn & Innovate",
@@ -82,8 +84,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         final user = await signInWithGoogle();
                         if (user != null) {
                           print("✅ Login successful: ${user.user?.displayName}");
-                          // You can navigate to home screen here
-                          // Navigator.pushReplacementNamed(context, '/home');
+                          // Navigate to Basic Info Screen after successful login
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const BasicInfoScreen(),
+                            ),
+                          );
                         }
                       },
                       child: Container(
@@ -98,12 +105,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset('assets/images/search1.png',
-                                height: 24, width: 24),
+                            Image.asset(
+                              'assets/images/search1.png',
+                              height: 24,
+                              width: 24,
+                            ),
                             const SizedBox(width: 12),
-                            Text("Login with Google",
-                                style:
-                                    Theme.of(context).textTheme.labelLarge),
+                            Text(
+                              "Login with Google",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
                           ],
                         ),
                       ),
