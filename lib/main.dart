@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'screens/Login_screen.dart';
+import 'screens/login_screen.dart';
 import 'screens/Basic_info.dart';
-import 'theme/theme.dart';
+import 'theme.dart';
 import 'firebase_options.dart';
+=======
+import 'package:evole/screens/Login_screen.dart'; 
+import 'package:evole/theme/theme.dart'; 
+>>>>>>> 73e6db7 (Added login screen, updated theme, fixed basic info form layout)
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
@@ -22,23 +27,37 @@ class EvoleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'EVOLE App',
+<<<<<<< HEAD
       debugShowCheckedModeBanner: false,
+      title: 'EVOLE',
       theme: appTheme,
       home: StreamBuilder<User?>(
         stream: firebaseAuth.authStateChanges(),
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<User?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
+
           if (snapshot.hasData) {
-            return const BasicInfoScreen();
+            return const Home_Page();
           }
+
           return const LoginScreen();
         },
       ),
     );
   }
 }
+=======
+      title: 'EVOLE App', 
+      debugShowCheckedModeBanner: false,
+      theme: appTheme, 
+      home: const LoginScreen(),
+    );
+  }
+}
+>>>>>>> 73e6db7 (Added login screen, updated theme, fixed basic info form layout)
