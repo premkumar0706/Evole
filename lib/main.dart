@@ -38,7 +38,7 @@ class EvoleApp extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            return const Home_Page();
+            return const BasicInfoScreen();
           }
 
           return const LoginScreen();
@@ -48,11 +48,4 @@ class EvoleApp extends StatelessWidget {
   }
 }
 
-      title: 'EVOLE App', 
-      debugShowCheckedModeBanner: false,
-      theme: appTheme, 
-      home: const LoginScreen(),
-    );
-  }
-}
- 73e6db7 (Added login screen, updated theme, fixed basic info form layout)
+     

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,7 +11,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool isLoading = false; 
+  bool isLoading = false;
 
   Future<UserCredential?> signInWithGoogle() async {
     setState(() {
@@ -23,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       if (googleUser == null) {
-        // User canceled sign-in
         setState(() {
           isLoading = false;
         });
@@ -52,123 +50,81 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-=======
-import 'package:evole/screens/Basic_info.dart';
-import 'package:flutter/material.dart';
-import '../theme/constants.dart';
-
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
->>>>>>> 73e6db7 (Added login screen, updated theme, fixed basic info form layout)
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [primaryColor, midColor, accentColor],
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Center(
-<<<<<<< HEAD
-          child: isLoading
-              ? const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("EVOLE",
-                        style: Theme.of(context).textTheme.headlineLarge),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Explore Learn & Innovate",
-                      style: Theme.of(context).textTheme.titleMedium,
+      backgroundColor: Color(0xFFFFFFFF),
+      body: Center(
+        child: isLoading
+            ? const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF034741)),
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                   const SizedBox(height: 200),
+
+                  Text(
+                    "EVOLE",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 38,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
                     ),
-                    const SizedBox(height: 200),
-                    GestureDetector(
-                      onTap: () async {
-                        final user = await signInWithGoogle();
-                        if (user != null) {
-                          print("✅ Login successful: ${user.user?.displayName}");
-                          // You can navigate to home screen here
-                          // Navigator.pushReplacementNamed(context, '/home');
-                        }
-                      },
-                      child: Container(
-                        height: 55,
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(buttonBorderRadius),
-                          border: Border.all(color: whiteColor, width: 1.5),
-                          color: Colors.transparent,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/images/search1.png',
-                                height: 24, width: 24),
-                            const SizedBox(width: 12),
-                            Text("Login with Google",
-                                style:
-                                    Theme.of(context).textTheme.labelLarge),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-=======
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("EVOLE", style: Theme.of(context).textTheme.headlineLarge),
-              const SizedBox(height: 8),
-              Text(
-                "Explore Learn & Innovate",
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 200),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BasicInfoScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 55,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(buttonBorderRadius),
-                    border: Border.all(color: whiteColor, width: 1.5),
-                    color: Colors.transparent,
+                    textAlign: TextAlign.center,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/images/search1.png',
-                        height: 24,
-                        width: 24,
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        "Login with Google",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ],
+                  const SizedBox(height: 1),
+                
+                  const Text(
+                    "Explore Learn & Innovate",
+                    style: TextStyle(
+                      color: Color(0xFF034741),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                ),
+
+                  const SizedBox(height: 200),
+
+              
+                  GestureDetector(
+                    onTap: () async {
+                      final user = await signInWithGoogle();
+                      if (user != null) {
+                        print("✅ Login successful: ${user.user?.displayName}");
+                    
+                      }
+                    },
+                    child: Container(
+                      height: 55,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(buttonBorderRadius),
+                        border: Border.all(color: Colors.black, width: 1.5),
+                        color: Colors.transparent,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/search1.png',
+                              height: 24, width: 28),
+                          const SizedBox(width: 14),
+                          const Text(
+                            "Login with Google",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: buttonFontSize,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
->>>>>>> 73e6db7 (Added login screen, updated theme, fixed basic info form layout)
-        ),
       ),
     );
   }

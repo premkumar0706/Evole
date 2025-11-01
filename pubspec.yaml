@@ -20,11 +20,6 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
 
-<<<<<<< HEAD
-flutter:
-  assets:
-  - assets/images/search1.png
-=======
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -39,4 +34,3 @@ flutter: # <--- This is the only top-level 'flutter:' key
   # To add assets to your application, add an assets section, like this:
   assets: # Indented 2 spaces from 'flutter'
     - assets/images/search1.png
->>>>>>> 73e6db7 (Added login screen, updated theme, fixed basic info form layout)
