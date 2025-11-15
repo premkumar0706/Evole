@@ -1,42 +1,34 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
 
-final ThemeData appTheme = ThemeData(
-  
-  primaryColor: primaryColor,
+ThemeData appTheme = ThemeData(
   scaffoldBackgroundColor: primaryColor,
-
-  
+  primaryColor: primaryColor,
+  colorScheme: const ColorScheme.light(
+    primary: primaryColor,
+    secondary: secondaryColor,
+  ),
   textTheme: const TextTheme(
-    headlineLarge: TextStyle(
-      color: whiteColor,
-      fontSize: headingFontSize,
-      fontWeight: FontWeight.bold,
-      letterSpacing: 2,
+    bodyLarge: TextStyle(color: Colors.black),
+    bodyMedium: TextStyle(color: Colors.black87),
+  ),
+  inputDecorationTheme: const InputDecorationTheme(
+    hintStyle: TextStyle(color: Colors.grey),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: primaryColor, width: 2),
     ),
-    titleMedium: TextStyle(
-      color: lightWhite,
-      fontSize: subtitleFontSize,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 1,
-    ),
-    labelLarge: TextStyle(
-      color: whiteColor,
-      fontSize: buttonFontSize,
-      fontWeight: FontWeight.w500,
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey),
     ),
   ),
-
-
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      backgroundColor: accentColor,
+      backgroundColor: primaryColor,
+      foregroundColor: Colors.white,
+      textStyle: buttonTextStyle,
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(buttonBorderRadius),
-      ),
-      textStyle: const TextStyle(
-        fontSize: buttonFontSize,
-        fontWeight: FontWeight.w600,
+        borderRadius: BorderRadius.circular(12),
       ),
     ),
   ),
