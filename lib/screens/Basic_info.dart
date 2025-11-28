@@ -263,6 +263,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
     );
   }
 
+
   Widget _buildSecondForm(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 80),
@@ -362,6 +363,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
       ),
     );
   }
+
 
   Widget _buildLabel(String text) {
     return Text(

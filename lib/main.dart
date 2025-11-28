@@ -1,3 +1,4 @@
+import 'package:evole/screens/basic.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +22,7 @@ class EvoleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp( 
 
       debugShowCheckedModeBanner: false,
       title: 'EVOLE',
@@ -38,9 +39,8 @@ class EvoleApp extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            return const BasicInfoScreen();
+            return const BasicForm();
           }
-
           return const LoginScreen();
         },
       ),

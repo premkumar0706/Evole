@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "829235342119",
+    "firebase_url": "https://evole-e2898-default-rtdb.firebaseio.com",
     "project_id": "evole-e2898",
     "storage_bucket": "evole-e2898.firebasestorage.app"
   },
@@ -12,7 +13,44 @@
           "package_name": "com.example.evole"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "829235342119-cc05lp1qer6u6jlh1d84u9s0i3sqk9f3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.evole",
+            "certificate_hash": "cd7712e41d1cd1fe79360c26326a678184d95e1a"
+          }
+        },
+        {
+          "client_id": "829235342119-jgipf6ih55snsl4gvl6feat05pq4isdn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.evole",
+            "certificate_hash": "8f04784f35c4e468e341f8a0fb91d596f70c6389"
+          }
+        },
+        {
+          "client_id": "829235342119-m1g7f38f0qs9f8cgkmlg23s6rpui1262.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.evole",
+            "certificate_hash": "cc8cf177d85150cb425ab6c0ddd9ad155fdf3358"
+          }
+        },
+        {
+          "client_id": "829235342119-mn7fhfb0018du07hsrmj90dp6j50oahu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.evole",
+            "certificate_hash": "d6e4332f4ee86aa39a7fe93e4f3ad46de0ac477f"
+          }
+        },
+        {
+          "client_id": "829235342119-e5l1lltmlg113u603kh9krq2j7r9bgsi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBf4l-cVeTIeTvP6o0nN5QIqLP7sB5LQjk"
@@ -20,7 +58,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "829235342119-e5l1lltmlg113u603kh9krq2j7r9bgsi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "829235342119-kgb9la5rdmma037lev1q3u0m4e0of33q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.evolve"
+              }
+            }
+          ]
         }
       }
     }
