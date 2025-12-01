@@ -1,9 +1,11 @@
+import 'package:evole/controller/userController.dart';
+import 'package:evole/homepage.dart';
 import 'package:evole/screens/basic.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'screens/login_screen.dart';
-import 'screens/Basic_info.dart';
 import 'theme.dart';
 import 'firebase_options.dart';
 
@@ -11,9 +13,10 @@ final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  Get.put(Usercontroller()); // register controller
+
   runApp(const EvoleApp());
 }
 
@@ -22,30 +25,50 @@ class EvoleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp( 
-
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'EVOLE',
       theme: appTheme,
+
       home: StreamBuilder<User?>(
         stream: firebaseAuth.authStateChanges(),
-        builder: (context, AsyncSnapshot<User?> snapshot) {
+        builder: (context, snapshot) {
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
+              body: Center(child: CircularProgressIndicator()),
             );
           }
 
-          if (snapshot.hasData) {
-            return const BasicForm();
+          if (snapshot.connectionState == ConnectionState.active) {
+
+            if (snapshot.data == null) {
+              return const LoginScreen();
+            }
+
+            return GetX<Usercontroller>(
+              builder: (controller) {
+
+                if (controller.isProfileCompleted.value == null) {
+  return const Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  );
+                }
+
+                if (controller.isProfileCompleted.value == true) {
+                  return const Homepage();
+                }
+
+                return const BasicForm();
+              },
+            );
           }
-          return const LoginScreen();
+                  return const Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  );
+  
         },
       ),
     );
   }
 }
-
-     

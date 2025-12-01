@@ -46,7 +46,6 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            
             if (_currentPage == 0)
               _buildPage1Background(w, h)
             else
