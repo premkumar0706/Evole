@@ -220,7 +220,7 @@ class _BasicFormState extends State<BasicForm> {
       body: Column(
         children: [
           Expanded(
-            child: PageView(
+            child: PageView(      
               controller: _controller,
               physics: const NeverScrollableScrollPhysics(),
               children: [
@@ -230,11 +230,11 @@ class _BasicFormState extends State<BasicForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(60.0),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
               ),
               onPressed: () async {
                 if (!validateStep(currentStep)) return;
