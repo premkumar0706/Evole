@@ -47,6 +47,18 @@ class _BasicFormState extends State<BasicForm> {
       firstDate: DateTime(1970),
       lastDate: DateTime.now(), 
       initialDate: DateTime(2000),
+       builder: (context, child) {
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.blue, 
+          ),
+        ),
+      ),
+      child: child!,
+    );
+  },
     );
 
     if (date != null) {
@@ -203,6 +215,7 @@ class _BasicFormState extends State<BasicForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: currentStep == 1
             ? IconButton(
@@ -217,46 +230,170 @@ class _BasicFormState extends State<BasicForm> {
             : null,
         title: const Text("Basic Form"),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView(      
-              controller: _controller,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                buildStep(0),
-                buildStep(1),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(60.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+     
+body: Stack(
+  children: [
+    LayoutBuilder(
+      builder: (context, constraints) {
+        final screenWidth = constraints.maxWidth;
+        final screenHeight = constraints.maxHeight;
+        return Stack(
+          children: [
+            
+            if (currentStep == 0) ...[
+              Positioned(
+                top: -screenHeight * 0.35,
+                left: -screenWidth * 0.70,
+                child: Transform.rotate(
+                  angle: -31.7 * 3.1416 / 180,
+                  child: Container(
+                    width: screenWidth * 0.7,
+                    height: screenWidth * 1.15,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF160B6E),
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(20),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              onPressed: () async {
-                if (!validateStep(currentStep)) return;
 
-                if (currentStep < formSteps.length - 1) {
-                  _controller.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut);
-                  setState(() => currentStep++);
-                } else {
-                  await saveBasicdetail();
-                }
-              },
-              child: Text(
-                currentStep == formSteps.length - 1 ? "Submit" : "Next",
-                style: const TextStyle(color: Colors.white, fontSize: 16),
+              Positioned(
+                bottom: -screenHeight * 0.27,
+                right: -screenWidth * 0.85,
+                child: Transform.rotate(
+                  angle: 45 * 3.1416 / 180,
+                  child: Container(
+                    width: screenWidth * 1.2,
+                    height: screenWidth * 0.8,
+                    decoration:
+                        const BoxDecoration(color: Color(0xFF160B6E)),
+                  ),
+                ),
               ),
+
+              Positioned(
+                bottom: -screenHeight * 0.1,
+                right: -screenWidth * 0.28,
+                child: Transform.rotate(
+                  angle: 11 * 3.1416 / 180,
+                  child: Container(
+                    width: screenWidth * 0.75,
+                    height: screenWidth * 0.45,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFA0EAFF),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+
+          
+            if (currentStep == 1) ...[
+              Positioned(
+                top: -screenHeight * 0.40,
+                right: -screenWidth * 0.64,
+                child: Transform.rotate(
+                  angle: 68.7 * 3.1416 / 180,
+                  child: Container(
+                    width: screenWidth * 0.7,
+                    height: screenWidth * 1.15,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF160B6E),
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(20),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              Positioned(
+                bottom: -screenHeight * 0.30,
+                left: -screenWidth * 0.80,
+                child: Transform.rotate(
+                  angle: -45 * 3.1416 / 180,
+                  child: Container(
+                    width: screenWidth * 1.2,
+                    height: screenWidth * 0.8,
+                    decoration:
+                        const BoxDecoration(color: Color(0xFFA0EAFF)),
+                  ),
+                ),
+              ),
+
+              Positioned(
+                bottom: -screenHeight * 0.13,
+                left: -screenWidth * 0.26,
+                child: Transform.rotate(
+                  angle: -18 * 3.1416 / 180,
+                  child: Container(
+                    width: screenWidth * 0.75,
+                    height: screenWidth * 0.45,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF160B6E),
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        );
+      },
+    ),
+
+     SafeArea(
+      child: Column(
+      children: [
+        Expanded(
+          child: PageView(
+            controller: _controller,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              buildStep(0),
+              buildStep(1),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(60.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+              padding: const EdgeInsets.symmetric(
+                  vertical: 16, horizontal: 32),
+            ),
+            onPressed: () async {
+              if (!validateStep(currentStep)) return;
+
+              if (currentStep < formSteps.length - 1) {
+                _controller.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut);
+                setState(() => currentStep++);
+              } else {
+                await saveBasicdetail();
+              }
+            },
+            child: Text(
+              currentStep == formSteps.length - 1 ? "Submit" : "Next",
+              style:
+                  const TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),)
+  ],
+),
+);
   }
 
   Widget buildStep(int index) {
@@ -267,14 +404,18 @@ class _BasicFormState extends State<BasicForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          if (index == 0) const SizedBox(height: 40),
+
+          Center(
+  child:Text(
             index == 0 ? "Basic Details" : "Address Information",
+             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: index == 0 ? 28 : 24,
               fontWeight: index == 0 ? FontWeight.bold : FontWeight.w600,
               color: index == 0 ? Colors.black : Colors.blue.shade700,
             ),
-          ),
+          ),),
 
           const SizedBox(height: 20),
 
