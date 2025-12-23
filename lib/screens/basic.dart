@@ -1,5 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class BasicForm extends StatefulWidget {
@@ -503,7 +503,7 @@ body: Stack(
           errorText: error,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
-        value: formData[key],
+        initialValue: formData[key],
         items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
         onChanged: (value) {
           setState(() {

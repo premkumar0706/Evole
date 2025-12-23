@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants.dart';
+import 'home_page.dart'; 
 
 class BasicInfoScreen extends StatefulWidget {
   const BasicInfoScreen({super.key});
@@ -28,10 +29,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
 
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.redAccent.shade100,
-      ),
+      SnackBar(content: Text(message), backgroundColor: Colors.redAccent.shade100),
     );
   }
 
@@ -46,22 +44,18 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            
-            if (_currentPage == 0)
-              _buildPage1Background(w, h)
-            else
-              _buildPage2Background(w, h),
+            // Background
+            _currentPage == 0 ? _buildPage1Background(w, h) : _buildPage2Background(w, h),
+
             Form(
               key: _formKey,
               child: PageView(
                 controller: _pageController,
                 physics: const NeverScrollableScrollPhysics(),
-                onPageChanged: (index) {
-                  setState(() => _currentPage = index);
-                },
+                onPageChanged: (i) => setState(() => _currentPage = i),
                 children: [
-                  _buildFirstForm(context),
-                  _buildSecondForm(context),
+                  _buildFirstForm(),
+                  _buildSecondForm(),
                 ],
               ),
             ),
@@ -71,54 +65,44 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
     );
   }
 
-  Widget _buildPage1Background(double screenWidth, double screenHeight) {
+  // Backgrounds (unchanged)
+  Widget _buildPage1Background(double w, double h) {
     return Stack(
       children: [
-        
         Positioned(
-          top: -screenHeight * 0.35,
-          left: -screenWidth * 0.70,
+          top: -h * 0.35,
+          left: -w * 0.70,
           child: Transform.rotate(
             angle: -31.7 * 3.1416 / 180,
             child: Container(
-              width: screenWidth * 0.7,
-              height: screenWidth * 1.15,
+              width: w * 0.7,
+              height: w * 1.15,
               decoration: const BoxDecoration(
                 color: Color(0xFF160B6E),
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(20),
-                ),
+                borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
               ),
             ),
           ),
         ),
-
         Positioned(
-          bottom: -screenHeight * 0.27,
-          right: -screenWidth * 0.85,
+          bottom: -h * 0.27,
+          right: -w * 0.85,
           child: Transform.rotate(
             angle: 45 * 3.1416 / 180,
-            child: Container(
-              width: screenWidth * 1.2,
-              height: screenWidth * 0.8,
-              decoration: const BoxDecoration(color: Color(0xFF160B6E)),
-            ),
+            child: Container(width: w * 1.2, height: w * 0.8, color: const Color(0xFF160B6E)),
           ),
         ),
-       
         Positioned(
-          bottom: -screenHeight * 0.1,
-          right: -screenWidth * 0.28,
+          bottom: -h * 0.1,
+          right: -w * 0.28,
           child: Transform.rotate(
             angle: 11 * 3.1416 / 180,
             child: Container(
-              width: screenWidth * 0.75,
-              height: screenWidth * 0.45,
+              width: w * 0.75,
+              height: w * 0.45,
               decoration: const BoxDecoration(
                 color: Color(0xFFA0EAFF),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                ),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
               ),
             ),
           ),
@@ -127,54 +111,43 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
     );
   }
 
-  Widget _buildPage2Background(double screenWidth, double screenHeight) {
+  Widget _buildPage2Background(double w, double h) {
     return Stack(
       children: [
-        
         Positioned(
-          top: -screenHeight * 0.40,
-          right: -screenWidth * 0.64,
+          top: -h * 0.40,
+          right: -w * 0.64,
           child: Transform.rotate(
             angle: 68.7 * 3.1416 / 180,
             child: Container(
-              width: screenWidth * 0.7,
-              height: screenWidth * 1.15,
+              width: w * 0.7,
+              height: w * 1.15,
               decoration: const BoxDecoration(
                 color: Color(0xFF160B6E),
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(20),
-                ),
+                borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
               ),
             ),
           ),
         ),
-       
         Positioned(
-          bottom: -screenHeight * 0.30,
-          left: -screenWidth * 0.80,
+          bottom: -h * 0.30,
+          left: -w * 0.80,
           child: Transform.rotate(
             angle: -45 * 3.1416 / 180,
-            child: Container(
-              width: screenWidth * 1.2,
-              height: screenWidth * 0.8,
-              decoration: const BoxDecoration(color: Color(0xFFA0EAFF )),
-            ),
+            child: Container(width: w * 1.2, height: w * 0.8, color: const Color(0xFFA0EAFF)),
           ),
         ),
-   
         Positioned(
-          bottom: -screenHeight * 0.13,
-          left: -screenWidth * 0.26,
+          bottom: -h * 0.13,
+          left: -w * 0.26,
           child: Transform.rotate(
             angle: -18 * 3.1416 / 180,
             child: Container(
-              width: screenWidth * 0.75,
-              height: screenWidth * 0.45,
+              width: w * 0.75,
+              height: w * 0.45,
               decoration: const BoxDecoration(
                 color: Color(0xFF160B6E),
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(20),
-                ),
+                borderRadius: BorderRadius.only(topRight: Radius.circular(20)),
               ),
             ),
           ),
@@ -183,79 +156,63 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
     );
   }
 
-
-  Widget _buildFirstForm(BuildContext context) {
+  // Page 1
+  Widget _buildFirstForm() {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 80),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCenteredHeading("Basic Information"),
-          
           const SizedBox(height: 40),
           _buildLabel("Name"),
-          _buildTextField("Your name", nameController,
-              validator: (v) => v!.isEmpty ? "Enter your name" : null),
+          _buildTextField("Your name", nameController, validator: (v) => v!.isEmpty ? "Enter your name" : null),
           const SizedBox(height: 25),
           _buildLabel("DOB"),
-          _buildTextField("Your DOB (DD/MM/YYYY)", dobController,
-              validator: (v) => v!.isEmpty ? "Enter your DOB" : null),
+          _buildTextField("Your DOB (DD/MM/YYYY)", dobController, validator: (v) => v!.isEmpty ? "Enter your DOB" : null),
           const SizedBox(height: 25),
           _buildLabel("Gender"),
-          _buildTextField("Your Gender", genderController,
-              validator: (v) => v!.isEmpty ? "Enter your gender" : null),
+          _buildTextField("Your Gender", genderController, validator: (v) => v!.isEmpty ? "Enter your gender" : null),
           const SizedBox(height: 25),
           _buildLabel("Phone No."),
-          _buildTextField("Your Number", phoneController,
-              keyboardType: TextInputType.phone,
-              validator: (v) => v!.isEmpty ? "Enter phone number" : null),
+          // FIXED: keyboardType comes BEFORE validator
+          _buildTextField(
+            "Your Number",
+            phoneController,
+            keyboardType: TextInputType.phone,
+            validator: (v) => v!.isEmpty ? "Enter phone number" : null,
+          ),
           const SizedBox(height: 30),
           Row(
             children: [
               Checkbox(
                 activeColor: const Color(0xFF160B6E),
                 value: agreePage1,
-                onChanged: (val) {
-                  setState(() => agreePage1 = val ?? false);
-                },
+                onChanged: (v) => setState(() => agreePage1 = v ?? false),
               ),
-              const Expanded(
-                child: Text(
-                  "I confirm that all the above details are correct.",
-                  style: TextStyle(fontSize: 14),
-                ),
-              ),
+              const Expanded(child: Text("I confirm that all the above details are correct.", style: TextStyle(fontSize: 14))),
             ],
           ),
-          const SizedBox(height: 10),
-          Center(child: SizedBox(
-              width: 200, // <-- increase/decrease this value for button width
-              height: 50, 
-            child: ElevatedButton(
-              onPressed: () {
-                if (!_formKey.currentState!.validate()) {
-                  _showError("Please fill all details!");
-                } else if (!agreePage1) {
-                  _showError("Please agree before continuing!");
-                } else {
-                  _pageController.nextPage(
-                    duration: const Duration(milliseconds: 400),
-                    curve: Curves.easeInOut,
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF000000),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+          const SizedBox(height: 20),
+          Center(
+            child: SizedBox(
+              width: 200,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (!_formKey.currentState!.validate()) {
+                    _showError("Please fill all details!");
+                  } else if (!agreePage1) {
+                    _showError("Please agree before continuing!");
+                  } else {
+                    _pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+                  }
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                child: const Text("Next", style: buttonTextStyle),
               ),
-              child: const Text("Next", style: buttonTextStyle),
             ),
-            ),
-              ),
+          ),
           const SizedBox(height: 20),
           _buildDots(),
         ],
@@ -263,8 +220,8 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
     );
   }
 
-
-  Widget _buildSecondForm(BuildContext context) {
+  // Page 2 - Register button fixed
+  Widget _buildSecondForm() {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 80),
       child: Column(
@@ -273,76 +230,64 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           _buildCenteredHeading("Basic Information"),
           const SizedBox(height: 40),
           _buildLabel("Current Status"),
-          _buildDropdown("Current Status", ["Student", "Working", "Other"],
-              (val) => setState(() => currentStatus = val)),
+          _buildDropdown("Current Status", ["Student", "Working", "Other"], (v) => setState(() => currentStatus = v)),
           const SizedBox(height: 25),
           _buildLabel("Select Highest Qualification"),
-          _buildDropdown("Select Highest Qualification",
-              ["10th", "12th", "B.Tech", "M.Tech", "Other"],
-              (val) => setState(() => highestQualification = val)),
+          _buildDropdown("Select Highest Qualification", ["10th", "12th", "B.Tech", "M.Tech", "Other"], (v) => setState(() => highestQualification = v)),
           const SizedBox(height: 25),
           _buildLabel("Field/Stream"),
-          _buildDropdown("Field/Stream",
-              ["CSE", "ECE", "EEE", "ME", "CE", "Other"],
-              (val) => setState(() => fieldStream = val)),
+          _buildDropdown("Field/Stream", ["CSE", "ECE", "EEE", "ME", "CE", "Other"], (v) => setState(() => fieldStream = v)),
           const SizedBox(height: 25),
           _buildLabel("Year Of Completion"),
-          _buildDropdown("Year Of Completion",
-              ["2023", "2024", "2025", "2026"],
-              (val) => setState(() => yearOfCompletion = val)),
+          _buildDropdown("Year Of Completion", ["2023", "2024", "2025", "2026"], (v) => setState(() => yearOfCompletion = v)),
           const SizedBox(height: 30),
           Row(
             children: [
               Checkbox(
                 activeColor: const Color(0xFF160B6E),
                 value: agreePage2,
-                onChanged: (val) {
-                  setState(() => agreePage2 = val ?? false);
-                },
+                onChanged: (v) => setState(() => agreePage2 = v ?? false),
               ),
-              const Expanded(
-                child: Text(
-                  "I confirm all  above information is true.",
-                  style: TextStyle(fontSize: 14),
-                ),
-              ),
+              const Expanded(child: Text("I confirm all above information is true.", style: TextStyle(fontSize: 14))),
             ],
           ),
-          const SizedBox(height: 10),
-          Center( child: SizedBox(
-              width: 220, // change for button length
+          const SizedBox(height: 20),
+          Center(
+            child: SizedBox(
+              width: 220,
               height: 50,
-            child: ElevatedButton(
-              onPressed: () {
-                if (currentStatus == null ||
-                    highestQualification == null ||
-                    fieldStream == null ||
-                    yearOfCompletion == null) {
-                  _showError("Please fill all details!");
-                } else if (!agreePage2) {
-                  _showError("Please agree before continuing!");
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content:
-                          Text("Registration Completed Successfully!"),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF000000),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              child: ElevatedButton(
+                onPressed: () {
+                  if (currentStatus == null || highestQualification == null || fieldStream == null || yearOfCompletion == null) {
+                    _showError("Please fill all details!");
+                  } else if (!agreePage2) {
+                    _showError("Please agree before continuing!");
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Registration Completed Successfully!"), backgroundColor: Colors.green),
+                    );
+
+                    nameController.clear();
+                    dobController.clear();
+                    genderController.clear();
+                    phoneController.clear();
+                    setState(() {
+                      currentStatus = highestQualification = fieldStream = yearOfCompletion = null;
+                      agreePage1 = agreePage2 = false;
+                    });
+                    _formKey.currentState?.reset();
+
+                    // FIXED: removed 'const' before HomePage()
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => HomePage()),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                child: const Text("Register", style: buttonTextStyle),
               ),
-              child: const Text("Register", style: buttonTextStyle),
             ),
-            ),
-              ),
+          ),
           const SizedBox(height: 20),
           _buildDots(),
         ],
@@ -350,99 +295,45 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
     );
   }
 
- 
-  Widget _buildCenteredHeading(String title) {
-    return Center(
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
+  // Helper widgets (unchanged)
+  Widget _buildCenteredHeading(String t) => Center(child: Text(t, style: const TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold)));
+  Widget _buildLabel(String t) => Text(t, style: const TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w500));
 
-
-  Widget _buildLabel(String text) {
-    return Text(
-      text,
-      style: const TextStyle(
-        color: Colors.black,
-        fontSize: 15,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
-
-  Widget _buildTextField(String hint, TextEditingController controller,
-      {TextInputType keyboardType = TextInputType.text,
-      String? Function(String?)? validator}) {
+  Widget _buildTextField(String hint, TextEditingController c,
+      {TextInputType keyboardType = TextInputType.text, String? Function(String?)? validator}) {
     return TextFormField(
-      controller: controller,
+      controller: c,
       keyboardType: keyboardType,
       validator: validator,
-       cursorColor: Colors.black, 
+      cursorColor: Colors.black,
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: const TextStyle(color: Colors.grey),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFF160B6E), width: 2),
-        ),
+        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF160B6E), width: 2)),
       ),
     );
   }
 
-  Widget _buildDropdown(
-      String hint, List<String> items, Function(String?) onChanged) {
-    return Theme(
-      data: Theme.of(context).copyWith(canvasColor: Colors.white),
-      child: DropdownButtonFormField<String>(
-        value: null,
-        hint: Text(hint, style: const TextStyle(color: Colors.grey)),
-        isExpanded: true,
-        decoration: const InputDecoration(
-          enabledBorder:
-              UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF160B6E), width: 2),
-          ),
-        ),
-        items: items
-            .map((e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(e, style: const TextStyle(color: Colors.black)),
-                ))
-            .toList(),
-        onChanged: onChanged,
+  Widget _buildDropdown(String hint, List<String> items, Function(String?) onChanged) {
+    return DropdownButtonFormField<String>(
+      hint: Text(hint, style: const TextStyle(color: Colors.grey)),
+      isExpanded: true,
+      decoration: const InputDecoration(
+        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF160B6E), width: 2)),
       ),
+      items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+      onChanged: onChanged,
     );
   }
 
-  Widget _buildDots() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _dot(isActive: _currentPage == 0),
-        const SizedBox(width: 8),
-        _dot(isActive: _currentPage == 1),
-      ],
-    );
-  }
+  Widget _buildDots() => Row(mainAxisAlignment: MainAxisAlignment.center, children: [_dot(isActive: _currentPage == 0), const SizedBox(width: 8), _dot(isActive: _currentPage == 1)]);
 
-  Widget _dot({required bool isActive}) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      width: 10,
-      height: 10,
-      decoration: BoxDecoration(
-        color: isActive ? const Color(0xFF160B6E) : Colors.grey.shade400,
-        shape: BoxShape.circle,
-      ),
-    );
-  }
+  Widget _dot({required bool isActive}) => AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        width: 10,
+        height: 10,
+        decoration: BoxDecoration(color: isActive ? const Color(0xFF160B6E) : Colors.grey.shade400, shape: BoxShape.circle),
+      );
 }
