@@ -13,7 +13,9 @@ final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   Get.put(Usercontroller()); // register controller
 
@@ -25,7 +27,7 @@ class EvoleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'EVOLE',
       theme: appTheme,
@@ -39,34 +41,26 @@ class EvoleApp extends StatelessWidget {
               body: Center(child: CircularProgressIndicator()),
             );
           }
-
-          if (snapshot.connectionState == ConnectionState.active) {
-
-            if (snapshot.data == null) {
-              return const LoginScreen();
-            }
-
-            return GetX<Usercontroller>(
-              builder: (controller) {
-
-                if (controller.isProfileCompleted.value == null) {
-  return const Scaffold(
-                    body: Center(child: CircularProgressIndicator()),
-                  );
-                }
-
-                if (controller.isProfileCompleted.value == true) {
-                  return const Homepage();
-                }
-
-                return const BasicForm();
-              },
-            );
+          if (!snapshot.hasData) {
+            return const LoginScreen();
           }
-                  return const Scaffold(
-                    body: Center(child: CircularProgressIndicator()),
-                  );
-  
+
+          return GetX<Usercontroller>(
+            builder: (controller) {
+
+              if (controller.isProfileCompleted.value == null) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (controller.isProfileCompleted.value == true) {
+                return const Homepage();
+              }
+
+              return const BasicForm();
+            },
+          );
         },
       ),
     );

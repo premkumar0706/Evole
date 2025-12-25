@@ -15,6 +15,7 @@ class Usercontroller extends GetxController {
     loadUserData();
   }
 
+  
   loadUserData() async {
     var user = _auth.currentUser;
 
