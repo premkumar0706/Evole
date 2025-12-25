@@ -1,5 +1,7 @@
+import 'package:evole/controller/userController.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../constants.dart';
 
@@ -13,42 +15,48 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
 
-  Future<UserCredential?> signInWithGoogle() async {
-    setState(() {
-      isLoading = true;
-    });
+Future<UserCredential?> signInWithGoogle() async {
+  if (!mounted) return null;
+  setState(() {
+    isLoading = true;
+  });
 
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  try {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      if (googleUser == null) {
-        setState(() {
-          isLoading = false;
-        });
-        return null;
-      }
-
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      return userCredential;
-    } catch (e) {
-      print("Error during Google sign-in: $e");
+    if (googleUser == null) {
+      if (!mounted) return null;
+      setState(() {
+        isLoading = false;
+      });
       return null;
-    } finally {
+    }
+
+    final googleAuth = await googleUser.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    // ❌ NO NAVIGATION — REMOVE pushReplacement
+    // StreamBuilder in main.dart will handle routing automatically
+
+    return userCredential;
+  } catch (e) {
+    print("Google Sign-in error: $e");
+    return null;
+  } finally {
+    if (mounted) {
       setState(() {
         isLoading = false;
       });
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -156,11 +164,9 @@ Positioned(
                       GestureDetector(
                         onTap: () async {
                           final user = await signInWithGoogle();
-                          if (user != null) {
-                            print(
-                                "✅ Login successful: ${user.user?.displayName}");
-
-                          }
+                           if (user != null) {
+    await Get.find<Usercontroller>().loadUserData();
+  }
                         },
                         child: Container(
                           height: 55,

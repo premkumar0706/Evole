@@ -77,6 +77,8 @@ class _BasicFormState extends State<BasicForm> {
     }
   }
 
+
+
   bool validateStep(int stepIndex) {
     bool isValid = true;
 
@@ -112,6 +114,8 @@ class _BasicFormState extends State<BasicForm> {
     setState(() {});
     return isValid;
   }
+
+
 
  Future<void> saveBasicdetail() async {
   try {
