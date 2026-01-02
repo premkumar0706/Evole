@@ -1,5 +1,6 @@
 import 'package:evole/controller/userController.dart';
-import 'package:evole/screens/homepage.dart';
+// import 'package:evole/screens/homepage.dart';
+import 'package:evole/screens/home_page.dart';
 import 'package:evole/screens/basic.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,6 +10,7 @@ import 'screens/login_screen.dart';
 // import 'screens/basic_info.dart';
 import 'theme.dart';
 import 'firebase_options.dart';
+
 
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -57,7 +59,7 @@ class EvoleApp extends StatelessWidget {
               }
 
               if (controller.isProfileCompleted.value == true) {
-                return const Homepage();
+                return const HomePage();
               }
 
               return const BasicForm();

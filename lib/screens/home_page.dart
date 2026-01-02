@@ -1,5 +1,7 @@
+import 'package:evole/controller/userController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'custom_drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+final userDataController = Get.find<Usercontroller>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,8 +38,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        title: const Text(
-          'Hello Shambhavi!',
+        title:  Text(
+          "Hello, ${userDataController.userData['name'] ?? 'User'}!",
+         
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,  // Will use Inter-Bold.ttf

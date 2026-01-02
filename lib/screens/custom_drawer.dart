@@ -72,7 +72,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Shambhavi Singh',
+                  'Prem kumar',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -82,7 +82,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'shambhavi@example.com',
+                  'Prem@example.com',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 14,
@@ -135,6 +135,14 @@ class CustomDrawer extends StatelessWidget {
                   onTap: () {
                     onClose();
                     // Navigate to quiz
+                  },
+                ),
+                 _drawerItem(
+                  icon: '', // You need to add this SVG
+                  title: 'Councellor request',
+                  onTap: () {
+                    onClose();
+                    // Navigate to request
                   },
                 ),
                 const Divider(thickness: 1, height: 40),
