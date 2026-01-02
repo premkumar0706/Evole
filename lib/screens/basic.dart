@@ -493,31 +493,6 @@ body: Stack(
       );
     }
 
-    if (type == "dropdown") {
-      List<String> items = [];
-      if (key == "gender") items = genderList;
-      if (key == "currentStatus") items = statusList;
-      if (key == "qualification") items = qualificationList;
-      if (key == "stream") items = streamList;
-      if (key == "yearOfCompletion") items = yearList;
-
-      return DropdownButtonFormField<String>(
-        decoration: InputDecoration(
-          labelText: label,
-          errorText: error,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-        initialValue: formData[key],
-        items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-        onChanged: (value) {
-          setState(() {
-            formData[key] = value;
-            errorData[key] = null;
-          });
-        },
-      );
-    }
-
     return TextField(
       keyboardType: type == "number" ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
