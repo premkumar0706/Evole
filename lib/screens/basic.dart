@@ -410,8 +410,6 @@ class _BasicFormState extends State<BasicForm> {
                               color: Colors.white, fontSize: 16),
                         ),
                       ),
-
-                      // 🔥 DOTS — BUTTON KE BILKUL NEECH
                       const SizedBox(height: 6),
                       buildPageIndicator(),
                     ],
