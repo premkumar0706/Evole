@@ -102,7 +102,6 @@ class _BasicFormState extends State<BasicForm> {
           errorData["dob"] = null;
         }
       }
-
       if (type == "dropdown") {
         if (formData[key] == null) {
           errorData[key] = "${field["label"]} is required";
@@ -183,6 +182,11 @@ class _BasicFormState extends State<BasicForm> {
             return null;
           },
         },
+         {
+          "label": "Gender",
+          "key": "gender",
+          "type": "dropdown",
+        },
         {
           "label": "Phone no.",
           "key": "phone",
@@ -192,11 +196,6 @@ class _BasicFormState extends State<BasicForm> {
             if (value.length != 10) return "Phone must be 10 digits";
             return null;
           },
-        },
-        {
-          "label": "Gender",
-          "key": "gender",
-          "type": "dropdown",
         },
         {
           "label": "DOB",
@@ -375,7 +374,7 @@ class _BasicFormState extends State<BasicForm> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
                           padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 32),
+                              vertical: 18, horizontal: 80),
                         ),
                         onPressed: () async {
                           if (!validateStep(currentStep)) return;
@@ -676,7 +675,7 @@ class _BasicFormState extends State<BasicForm> {
                           : Colors.black,
                     ),
                   ),
-                  const Icon(Icons.keyboard_arrow_down),
+                  const Icon(Icons.keyboard_arrow_down),    
                 ],
               ),
             ),
@@ -699,13 +698,16 @@ class _BasicFormState extends State<BasicForm> {
                       setState(() {
                         formData[fieldKey] = value;
                         errorData[fieldKey] = null;
-                        if (fieldKey == "currentStatus")
+                        if (fieldKey == "currentStatus") {
                           showStatusOptions = false;
-                        if (fieldKey == "qualification")
+                        }
+                        if (fieldKey == "qualification") {
                           showQualificationOptions = false;
+                        }
                         if (fieldKey == "stream") showStreamOptions = false;
-                        if (fieldKey == "yearOfCompletion")
+                        if (fieldKey == "yearOfCompletion") {
                           showYearOptions = false;
+                        }
                       });
                     },
                   );

@@ -1,7 +1,7 @@
 import 'package:evole/controller/userController.dart';
 // import 'package:evole/screens/homepage.dart';
-import 'package:evole/screens/home_page.dart';
-import 'package:evole/screens/basic.dart';
+// import 'package:evole/screens/home_page.dart';
+// import 'package:evole/screens/basic.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +10,8 @@ import 'screens/login_screen.dart';
 // import 'screens/basic_info.dart';
 import 'theme.dart';
 import 'firebase_options.dart';
+import 'package:evole/screens/Giveguidance.dart';
+// import 'package:evole/screens/Giveguidanceform.dart';
 
 
 
@@ -59,10 +61,11 @@ class EvoleApp extends StatelessWidget {
               }
 
               if (controller.isProfileCompleted.value == true) {
-                return const HomePage();
+                // return const HomePage();
               }
 
-              return const BasicForm();
+              // return const BasicForm();
+              return const GiveGuidanceScreen();
             },
           );
         },

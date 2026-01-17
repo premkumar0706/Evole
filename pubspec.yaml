@@ -157,3 +157,10 @@ flutter:
           weight: 600
         - asset: assets/fonts/Inter-Bold.ttf
           weight: 700
+
+          
+    - family: InriaSerif
+      fonts:
+        - asset: assets/fonts/InriaSerif-Regular.ttf
+        - asset: assets/fonts/InriaSerif-Bold.ttf
+          weight: 700
