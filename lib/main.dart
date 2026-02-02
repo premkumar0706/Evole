@@ -20,7 +20,7 @@ final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,      
   );
 
   Get.put(Usercontroller()); // register controller
