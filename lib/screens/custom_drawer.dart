@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:evole/screens/Giveguidance.dart';
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback onClose;
@@ -23,7 +23,8 @@ class CustomDrawer extends StatelessWidget {
         children: [
           // Header with close button
           Container(
-            padding: const EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 30),
+            padding:
+                const EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 30),
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: const BorderRadius.only(
@@ -45,7 +46,8 @@ class CustomDrawer extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: onClose,
-                      icon: const Icon(Icons.close, color: Colors.white, size: 28),
+                      icon: const Icon(Icons.close,
+                          color: Colors.white, size: 28),
                     ),
                     Text(
                       'Profile',
@@ -123,6 +125,14 @@ class CustomDrawer extends StatelessWidget {
                   },
                 ),
                 _drawerItem(
+                  icon: 'assets/icons/moon.svg', // You need to add this SVG
+                  title: 'Give guidance',
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context, GiveGuidanceScreen.routeName);
+                  },
+                ),
+                _drawerItem(
                   icon: 'assets/icons/chat.svg', // You need to add this SVG
                   title: 'Counseling Sessions',
                   onTap: () {
@@ -138,7 +148,7 @@ class CustomDrawer extends StatelessWidget {
                     // Navigate to quiz
                   },
                 ),
-                 _drawerItem(
+                _drawerItem(
                   icon: '', // You need to add this SVG
                   title: 'Councellor request',
                   onTap: () {

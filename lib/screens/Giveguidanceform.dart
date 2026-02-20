@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class GiveGuidanceForm extends StatefulWidget {
   const GiveGuidanceForm({super.key});
@@ -9,11 +13,23 @@ class GiveGuidanceForm extends StatefulWidget {
 }
 
 class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
+  final ImagePicker _picker = ImagePicker();
+  File? selectedPhoto;
+
   final PageController _pageController = PageController();
   int currentStep = 0;
 
   final Map<String, String?> formData = {};
   final Map<String, String?> errorData = {};
+
+  final Map<String, TextEditingController> controllers = {};
+
+  TextEditingController _controller(String key) {
+    return controllers.putIfAbsent(
+      key,
+      () => TextEditingController(text: formData[key]),
+    );
+  }
 
   bool qOpen = false,
       yOpen = false,
@@ -22,7 +38,7 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
       cOpen = false,
       mOpen = false,
       dOpen = false,
-      tOpen = false, 
+      tOpen = false,
       vOpen = false,
       cityOpen = false;
 
@@ -46,7 +62,6 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 18),
       child: Center(
-    
         child: Text(
           text,
           textAlign: TextAlign.center,
@@ -73,16 +88,14 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
         clipBehavior: Clip.none,
         children: [
           TextFormField(
+            controller: _controller(fieldKey), // ✅ FIX
             readOnly: readOnly,
             onTap: onTap,
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
               hintText: readOnly ? "Select" : "Type here",
-              hintStyle: TextStyle(
-                color: Colors.grey.shade500,
-                fontSize: 14,
-              ),
+              hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 14),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
               enabledBorder: OutlineInputBorder(
@@ -140,10 +153,7 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
           label: label,
           fieldKey: key,
           readOnly: true,
-          suffix: Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.grey.shade400,
-          ),
+          suffix: Icon(Icons.keyboard_arrow_down, color: Colors.grey.shade400),
           onTap: toggle,
         ),
         if (isOpen)
@@ -163,6 +173,7 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
                   title: Text(e),
                   onChanged: (v) {
                     formData[key] = v;
+                    _controller(key).text = v!;
                     errorData[key] = null;
                     toggle();
                     setState(() {});
@@ -194,6 +205,83 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
     );
   }
 
+  Future<void> createCounsellorRequest() async {
+    try {
+            final user = FirebaseAuth.instance.currentUser;
+print("current user: $user");
+        if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Please login first"),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      final callable =
+          FirebaseFunctions.instance.httpsCallable('createCounsellorRequest');
+
+      final result = await callable.call({
+        "basicDetail": {
+          "qualification": formData["qualification"],
+          "institute": formData["institute"],
+          "year": formData["year"],
+          "specialization": formData["specialization"],
+          "certificate": formData["certificate"],
+          "experience": formData["experience"],
+        },
+        "qualification": {
+          "category": formData["category"],
+          "mode": formData["mode"],
+          "days": formData["days"],
+          "timeSlot": formData["timeSlot"],
+        },
+        "counsellingDomain": {
+          "philosophy": formData["philosophy"],
+          "values": formData["values"],
+        },
+        "availability": {
+          "state": formData["locality"],
+          "address": formData["address"],
+          "city": formData["city"],
+        },
+        "approach": {
+          "photo": formData["Photo"],
+          "sessionUrl": formData["Url"],
+        }
+      });
+
+
+    
+      if (result.data['success'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Data saved successfully!"),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      } else {
+        print("Error from function: ${result.data['message']}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed to save: ${result.data['message']}"),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error: $e"),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
   bool validateStep() {
     List<String> required = [];
 
@@ -209,7 +297,7 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
     } else if (currentStep == 1) {
       required = ["category", "mode", "days", "philosophy", "values"];
     } else {
-      required = ["address", "city", "session"];
+      required = ["locality", "address", "city", "Photo", "Url"];
     }
 
     bool valid = true;
@@ -223,6 +311,20 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
     return valid;
   }
 
+  Future<void> pickPhoto() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      selectedPhoto = File(image.path);
+
+      _controller("Photo").text = image.name;
+      formData["Photo"] = image.path;
+
+      errorData["Photo"] = null;
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -230,10 +332,7 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
         centerTitle: true,
         title: const Text(
           "Give Guidance",
-          style: TextStyle(
-            fontSize: 36, 
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(fontSize: 36, fontWeight: FontWeight.w600),
         ),
         leading: currentStep == 0
             ? null
@@ -265,178 +364,149 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
-              child: Center(
-                child: SizedBox(
-                  width: 250,
-                  height: 60,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    onPressed: () {
-                      if (!validateStep()) return;
+              child: SizedBox(
+                width: 250,
+                height: 60,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                  onPressed: () {
+                    if (!validateStep()) return;
 
-                      if (currentStep < 2) {
-                        currentStep++;
-                        _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease,
-                        );
-                      }
-                      setState(() {});
-                    },
-                    child: Text(
-                      currentStep == 2 ? "Submit" : "Next",
-                      style: const TextStyle(fontSize: 18),
-                    ),
+                    if (currentStep < 2) {
+                      currentStep++;
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease,
+                      );
+                    } else {
+                      print("Submitting data: $formData");
+                      createCounsellorRequest();
+                    }
+                    setState(() {});
+                  },
+                  child: Text(
+                    currentStep == 2 ? "Submit" : "Next",
+                    style: const TextStyle(fontSize: 18),
                   ),
                 ),
               ),
             ),
-
-          
             pageDots(),
             const SizedBox(height: 10),
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 20,
-              offset: const Offset(0, -4),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: 0,
-          type: BottomNavigationBarType.fixed,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          onTap: (index) {
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/home.svg',
-                width: 24,
-                height: 24,
-                color: Colors.black,
-              ),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/folder.svg',
-                width: 24,
-                height: 24,
-                color: Colors.grey,
-              ),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/settings.svg',
-                width: 24,
-                height: 24,
-                color: Colors.grey, 
-              ),
-              label: '',
-            ),
-          ],
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        type: BottomNavigationBarType.fixed,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        items: [
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset('assets/icons/home.svg',
+                width: 24, height: 24),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset('assets/icons/folder.svg',
+                width: 24, height: 24),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset('assets/icons/settings.svg',
+                width: 24, height: 24),
+            label: '',
+          ),
+        ],
       ),
     );
   }
 
   Widget stepOne() => SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            stepTitle("Qualifications"),
-            floatingDropdown("Highest Qualification", "qualification",
-                qualificationList, qOpen, () {
-              qOpen = !qOpen;
-              setState(() {});
-            }),
-            floatingField(label: "Institute", fieldKey: "institute"),
-            floatingDropdown("Year Of Passing", "year", yearList, yOpen, () {
-              yOpen = !yOpen;
-              setState(() {});
-            }),
-            floatingDropdown(
-                "Specialization", "specialization", specializationList, sOpen,
-                () {
-              sOpen = !sOpen;
-              setState(() {});
-            }),
-            floatingField(label: "Certificate URL", fieldKey: "certificate"),
-            floatingDropdown(
-                "Total Year OfExperience", "experience", experienceList, eOpen,
-                () {
-              eOpen = !eOpen;
-              setState(() {});
-            }),
-          ],
-        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(children: [
+          stepTitle("Qualifications"),
+          floatingDropdown("Highest Qualification", "qualification",
+              qualificationList, qOpen, () {
+            qOpen = !qOpen;
+            setState(() {});
+          }),
+          floatingField(label: "Institute", fieldKey: "institute"),
+          floatingDropdown("Year Of Passing", "year", yearList, yOpen, () {
+            yOpen = !yOpen;
+            setState(() {});
+          }),
+          floatingDropdown(
+              "Specialization", "specialization", specializationList, sOpen,
+              () {
+            sOpen = !sOpen;
+            setState(() {});
+          }),
+          floatingField(label: "Certificate URL", fieldKey: "certificate"),
+          floatingDropdown(
+              "Total Year Of Experience", "experience", experienceList, eOpen,
+              () {
+            eOpen = !eOpen;
+            setState(() {});
+          }),
+        ]),
       );
 
   Widget stepTwo() => SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            stepTitle("Counselling Domain"),
-            floatingDropdown("Category", "category", categoryList, cOpen, () {
-              cOpen = !cOpen;
-              setState(() {});
-            }),
-            floatingDropdown("Preferred Mode", "mode", modeList, mOpen, () {
-              mOpen = !mOpen;
-              setState(() {});
-            }),
-            floatingDropdown("Available Days", "days", daysList, dOpen, () {
-              dOpen = !dOpen;
-              setState(() {});
-            }),
-          
-            floatingDropdown("Time Slots", "timeSlot", timeSlotList, tOpen, () {
-              tOpen = !tOpen;
-              setState(() {});
-            }),
-            floatingField(
-                label: "Counselling Philosophy", fieldKey: "philosophy"),
-            floatingDropdown("Values", "values", valuesList, vOpen, () {
-              vOpen = !vOpen;
-              setState(() {});
-            }),
-          ],
-        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(children: [
+          stepTitle("Counselling Domain"),
+          floatingDropdown("Category", "category", categoryList, cOpen, () {
+            cOpen = !cOpen;
+            setState(() {});
+          }),
+          floatingDropdown("Preferred Mode", "mode", modeList, mOpen, () {
+            mOpen = !mOpen;
+            setState(() {});
+          }),
+          floatingDropdown("Available Days", "days", daysList, dOpen, () {
+            dOpen = !dOpen;
+            setState(() {});
+          }),
+          floatingDropdown("Time Slots", "timeSlot", timeSlotList, tOpen, () {
+            tOpen = !tOpen;
+            setState(() {});
+          }),
+          floatingField(
+              label: "Counselling Philosophy", fieldKey: "philosophy"),
+          floatingDropdown("Values", "values", valuesList, vOpen, () {
+            vOpen = !vOpen;
+            setState(() {});
+          }),
+        ]),
       );
 
   Widget stepThree() => SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            stepTitle("Almost Done!"),
-            floatingField(label: "State", fieldKey: "locality"),
-            floatingField(label: "Address", fieldKey: "address"),
-            floatingDropdown("City", "city", cityList, cityOpen, () {
-              cityOpen = !cityOpen;
-              setState(() {});
-            }),
-            floatingField(label: "Your Photo", fieldKey: "Photo"),
-            floatingField(label: "Sample Session Url", fieldKey: "Url"),
-          ],
-        ),
-      ); 
+        padding: const EdgeInsets.all(16),
+        child: Column(children: [
+          stepTitle("Almost Done!"),
+          floatingField(label: "State", fieldKey: "locality"),
+          floatingField(label: "Address", fieldKey: "address"),
+          floatingDropdown("City", "city", cityList, cityOpen, () {
+            cityOpen = !cityOpen;
+            setState(() {});
+          }),
+          GestureDetector(
+            onTap: pickPhoto,
+            child: AbsorbPointer(
+              child: floatingField(
+                label: "Your Photo",
+                fieldKey: "Photo",
+                readOnly: true,
+                suffix: Icon(Icons.photo_library),
+              ),
+            ),
+          ),
+          floatingField(label: "Sample Session Url", fieldKey: "Url"),
+        ]),
+      );
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'custom_drawer.dart';
-
+import 'package:evole/screens/Giveguidance.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -14,7 +14,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-final userDataController = Get.find<Usercontroller>();
+  final userDataController = Get.find<Usercontroller>();
+
+  final PageController _pageController = PageController(viewportFraction: 0.88);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,217 +41,167 @@ final userDataController = Get.find<Usercontroller>();
             ),
           ),
         ),
-        title:  Text(
+        title: Text(
           "Hello, ${userDataController.userData['name'] ?? 'User'}!",
-         
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 22,
-            fontWeight: FontWeight.bold,  // Will use Inter-Bold.ttf
+            fontWeight: FontWeight.bold,
             color: Colors.black,
-            fontFamily: 'Inter',  // Added this line
+            fontFamily: 'Inter',
           ),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: SvgPicture.asset(
-              'assets/icons/bookmark.svg', // Bookmark icon on right
-              width: 26,
+              'assets/icons/bookmark.svg',
               height: 26,
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: SvgPicture.asset(
-              'assets/icons/bell.svg', // Bell icon on right
+              'assets/icons/bell.svg',
               width: 28,
               height: 28,
             ),
           ),
         ],
       ),
-
       drawer: CustomDrawer(
         onClose: () {
           _scaffoldKey.currentState?.closeDrawer();
         },
       ),
-
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Notification Card - Updated to match design
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFEFCE3), // Light grey background
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFFEFCE3), width: 1),
-              ),
-              child: Row(
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // ---------------- NOTIFICATION ----------------
                   Container(
-                    width: 48,
-                    height: 48,
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF1F1F1),
-                      borderRadius: BorderRadius.circular(12),
+                      color: const Color(0xFFFEFCE3),
+                      borderRadius: BorderRadius.circular(16),
+                      border:
+                          Border.all(color: const Color(0xFFFEFCE3), width: 1),
                     ),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        'assets/icons/bell(1).svg',
-                        width: 24,
-                        height: 24,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Notification',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,  // Will use Inter-SemiBold.ttf
-                                color: Colors.black,
-                                fontFamily: 'Inter',  // Added this line
-                              ),
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF1F1F1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              'assets/icons/bell(1).svg',
+                              width: 24,
+                              height: 24,
+                              color: Colors.black,
                             ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Notification',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                      fontFamily: 'Inter',
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Text(
+                                      '*New*',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Inter',
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              child: const Text(
-                                '*New*',
+                              const SizedBox(height: 6),
+                              const Text(
+                                '3rd semester start date - 08/12/25 (DIGITAL)',
                                 style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Inter',  // Added this line
+                                  fontSize: 14,
+                                  color: Colors.black54,
+                                  fontFamily: 'Inter',
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          '3rd semester start date - 08/12/25 (DIGITAL)',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,  // Will use Inter-Regular.ttf
-                            color: Colors.black54,
-                            fontFamily: 'Inter',  // Added this line
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
 
-            // 4 Small Rounded Boxes - EMPTY boxes as requested
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _emptyBox(),
-                _emptyBox(),
-                _emptyBox(),
-                _emptyBox(),
-              ],
-            ),
-            const SizedBox(height: 40),
-
-            // Seek Guidance Card - Updated to match design
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(28),
-              decoration: BoxDecoration(
-                color: const Color(0x5EB5ECFC),
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: const Color(0xFF068BB0), width: 1),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Seek Guidance',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontFamily: 'Inter',  // Added this line
-                    ),
-                  ),
                   const SizedBox(height: 32),
 
-                  // Placeholder lines (simpler design)
-                  _guidancePlaceholderLine(width: 0.9),
-                  const SizedBox(height: 12),
-                  _guidancePlaceholderLine(width: 0.8),
-                  const SizedBox(height: 12),
-                  _guidancePlaceholderLine(width: 0.7),
-
-                  const SizedBox(height: 40),
-
-                  // Get Started Button - Updated style
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Navigation soon!
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 18, horizontal: 40),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                      ),
-                      child: Text(
-                        'Get Started',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          fontFamily: 'Inter',  // Added this line
-                        ),
-                      ),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _emptyBox(),
+                      _emptyBox(),
+                      _emptyBox(),
+                      _emptyBox(),
+                    ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
+            SizedBox(
+              height: 360,
+              child: PageView(
+                controller: _pageController,
+                children: [
+                  _guidanceCard(
+                    title: 'Seek Guidance',
+                    buttonText: 'Get Started',
+                  ),
+                  _guidanceCard(
+                    title: 'Give Guidance',
+                    buttonText: 'Start Helping',
+                  ),
+                  _guidanceCard(
+                    title: 'Sessions',
+                    buttonText: 'View Sessions',
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
-
-      // Bottom Navigation Bar - Updated to match design
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -261,8 +214,8 @@ final userDataController = Get.find<Usercontroller>();
         ),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+            topLeft: Radius.circular(0),
+            topRight: Radius.circular(0),
           ),
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
@@ -276,56 +229,29 @@ final userDataController = Get.find<Usercontroller>();
             elevation: 0,
             items: [
               BottomNavigationBarItem(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: _currentIndex == 0
-                        ? Colors.black.withOpacity(0.1)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: SvgPicture.asset(
-                    'assets/icons/home.svg',
-                    width: 24,
-                    height: 24,
-                    color: _currentIndex == 0 ? Colors.black : Colors.grey,
-                  ),
+                icon: SvgPicture.asset(
+                  'assets/icons/home.svg',
+                  width: 24,
+                  height: 24,
+                  color: _currentIndex == 0 ? Colors.black : Colors.grey,
                 ),
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: _currentIndex == 1
-                        ? Colors.black.withOpacity(0.1)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: SvgPicture.asset(
-                    'assets/icons/folder.svg',
-                    width: 24,
-                    height: 24,
-                    color: _currentIndex == 1 ? Colors.black : Colors.grey,
-                  ),
+                icon: SvgPicture.asset(
+                  'assets/icons/folder.svg',
+                  width: 24,
+                  height: 24,
+                  color: _currentIndex == 1 ? Colors.black : Colors.grey,
                 ),
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: _currentIndex == 2
-                        ? Colors.black.withOpacity(0.1)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: SvgPicture.asset(
-                    'assets/icons/settings.svg',
-                    width: 24,
-                    height: 24,
-                    color: _currentIndex == 2 ? Colors.black : Colors.grey,
-                  ),
+                icon: SvgPicture.asset(
+                  'assets/icons/settings.svg',
+                  width: 24,
+                  height: 24,
+                  color: _currentIndex == 2 ? Colors.black : Colors.grey,
                 ),
                 label: '',
               ),
@@ -336,7 +262,74 @@ final userDataController = Get.find<Usercontroller>();
     );
   }
 
-  // Empty box - Just border and shadow, no icon
+  Widget _guidanceCard({
+    required String title,
+    required String buttonText,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(28),
+        decoration: BoxDecoration(
+          color: const Color(0x5EB5ECFC),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: const Color(0xFF068BB0), width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontFamily: 'Inter',
+              ),
+            ),
+            const SizedBox(height: 32),
+            _guidancePlaceholderLine(width: 0.9),
+            const SizedBox(height: 12),
+            _guidancePlaceholderLine(width: 0.8),
+            const SizedBox(height: 12),
+            _guidancePlaceholderLine(width: 0.7),
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                    if (title == 'Give Guidance') {
+                  Navigator.pushNamed(
+                    context,
+                    GiveGuidanceScreen.routeName,
+                  );
+                }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: Text(
+                  buttonText,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontFamily: 'Inter',
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _emptyBox() {
     return Container(
       width: 82,
@@ -356,7 +349,6 @@ final userDataController = Get.find<Usercontroller>();
     );
   }
 
-  // Updated placeholder line for Seek Guidance section
   Widget _guidancePlaceholderLine({double width = 1.0}) {
     return Container(
       height: 12,

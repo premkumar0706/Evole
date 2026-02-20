@@ -15,48 +15,48 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
 
-Future<UserCredential?> signInWithGoogle() async {
-  if (!mounted) return null;
-  setState(() {
-    isLoading = true;
-  });
+  Future<UserCredential?> signInWithGoogle() async {
+    if (!mounted) return null;
+    setState(() {
+      isLoading = true;
+    });
 
-  try {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    if (googleUser == null) {
-      if (!mounted) return null;
-      setState(() {
-        isLoading = false;
-      });
+      if (googleUser == null) {
+        if (!mounted) return null;
+        setState(() {
+          isLoading = false;
+        });
+        return null;
+      }
+
+      final googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // ❌ NO NAVIGATION — REMOVE pushReplacement
+      // StreamBuilder in main.dart will handle routing automatically
+
+      return userCredential;
+    } catch (e) {
+      print("Google Sign-in error: $e");
       return null;
-    }
-
-    final googleAuth = await googleUser.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    final userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-
-    // ❌ NO NAVIGATION — REMOVE pushReplacement
-    // StreamBuilder in main.dart will handle routing automatically
-
-    return userCredential;
-  } catch (e) {
-    print("Google Sign-in error: $e");
-    return null;
-  } finally {
-    if (mounted) {
-      setState(() {
-        isLoading = false;
-      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -67,61 +67,54 @@ Future<UserCredential?> signInWithGoogle() async {
       backgroundColor: const Color(0xFFFFFFFF),
       body: Stack(
         children: [
-          
-        Positioned(
-  top: -screenHeight * 0.29,   
-  right: -screenWidth * 0.60,  
-  child: Transform.rotate(
-    angle: 54.7 * 3.1416 / 180, 
-    child: Container(
-      width: screenWidth * 1.15, 
-      height: screenWidth * 1.15,
-      decoration: const BoxDecoration(
-        color: Color(0xFF160B6E),
-        borderRadius: BorderRadius.only( 
-          bottomRight: Radius.circular(25),
-        ),
-      ),
-    ),
-  ),
-),
-
-Positioned(
-  bottom: -screenHeight * 0.22, 
-  left: -screenWidth * 0.85,    
-  child: Transform.rotate(
-    angle: -45 * 3.1416 / 180,  
-    child: Container(
-      width: screenWidth * 1.2,  
-      height: screenWidth * 0.8, 
-      decoration: const BoxDecoration(
-        color: Color(0xFF160B6E), 
-        ),
-    ),
-  ),
-),
-
-
-Positioned(
-  bottom: -screenHeight * 0.34,
-  left: -screenWidth * 0.32,    
-  child: Transform.rotate(
-    angle: -27 * 3.1416 / 180, 
-    child: Container(
-      width: screenWidth * 1.15,
-      height: screenWidth * 0.95,
-      decoration: const BoxDecoration(
-        color: Color(0xFFA0EAFF), 
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(20),
-        ),
-      ),
-    ),
-  ),
-),
-
-
-
+          Positioned(
+            top: -screenHeight * 0.29,
+            right: -screenWidth * 0.60,
+            child: Transform.rotate(
+              angle: 54.7 * 3.1416 / 180,
+              child: Container(
+                width: screenWidth * 1.15,
+                height: screenWidth * 1.15,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF160B6E),
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(25),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -screenHeight * 0.22,
+            left: -screenWidth * 0.85,
+            child: Transform.rotate(
+              angle: -45 * 3.1416 / 180,
+              child: Container(
+                width: screenWidth * 1.2,
+                height: screenWidth * 0.8,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF160B6E),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -screenHeight * 0.34,
+            left: -screenWidth * 0.32,
+            child: Transform.rotate(
+              angle: -27 * 3.1416 / 180,
+              child: Container(
+                width: screenWidth * 1.15,
+                height: screenWidth * 0.95,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFA0EAFF),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+              ),
+            ),
+          ),
           Center(
             child: isLoading
                 ? const CircularProgressIndicator(
@@ -132,8 +125,6 @@ Positioned(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 200),
-
-                      
                       const Text(
                         "EVOLE",
                         style: TextStyle(
@@ -144,10 +135,7 @@ Positioned(
                         ),
                         textAlign: TextAlign.center,
                       ),
-
                       const SizedBox(height: 1),
-
-                      
                       const Text(
                         "Explore Learn & Innovate",
                         style: TextStyle(
@@ -157,23 +145,21 @@ Positioned(
                         ),
                         textAlign: TextAlign.center,
                       ),
-
                       const SizedBox(height: 120),
-
-                      
                       GestureDetector(
                         onTap: () async {
                           final user = await signInWithGoogle();
-                           if (user != null) {
-    await Get.find<Usercontroller>().loadUserData();
-  }
+                          if (user != null) {
+                            await Get.find<Usercontroller>().loadUserData();
+                          }
                         },
                         child: Container(
                           height: 55,
                           width: MediaQuery.of(context).size.width * 0.75,
                           decoration: BoxDecoration(
-                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: const Color(0xFF8B8787), width: 1.5),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                                color: const Color(0xFF8B8787), width: 1.5),
                             color: Colors.transparent,
                           ),
                           child: Row(

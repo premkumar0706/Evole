@@ -1,7 +1,10 @@
 import 'package:evole/controller/userController.dart';
+import 'package:evole/routes.dart';
+import 'package:evole/screens/basic.dart';
+import 'package:evole/screens/home_page.dart';
 // import 'package:evole/screens/homepage.dart';
 // import 'package:evole/screens/home_page.dart';
-// import 'package:evole/screens/basic.dart';
+// // import 'package:evole/screens/basic.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +14,9 @@ import 'screens/login_screen.dart';
 import 'theme.dart';
 import 'firebase_options.dart';
 import 'package:evole/screens/Giveguidance.dart';
-// import 'package:evole/screens/Giveguidanceform.dart';
+// import 'package:evole/screens/Requestaccept.dart';
+// import 'package:evole/screens/Request.dart';
+// import 'package:evole/screens/Counsellorprofile.dart';
 
 
 
@@ -37,6 +42,8 @@ class EvoleApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'EVOLE',
       theme: appTheme,
+        routes: routes,
+        
 
       home: StreamBuilder<User?>(
         stream: firebaseAuth.authStateChanges(),
@@ -61,11 +68,11 @@ class EvoleApp extends StatelessWidget {
               }
 
               if (controller.isProfileCompleted.value == true) {
-                // return const HomePage();
+                return const HomePage();
               }
 
-              // return const BasicForm();
-              return const GiveGuidanceScreen();
+              return const BasicForm();
+              
             },
           );
         },
