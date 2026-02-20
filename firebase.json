@@ -1,1 +1,25 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"evole-e2898","appId":"1:829235342119:android:990ab8d7afaa271d4f5702","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"evole-e2898","configurations":{"android":"1:829235342119:android:990ab8d7afaa271d4f5702","ios":"1:829235342119:ios:9e7e9da7125bf9274f5702","macos":"1:829235342119:ios:9e7e9da7125bf9274f5702","web":"1:829235342119:web:de1c7be57d9d53264f5702","windows":"1:829235342119:web:4bfa0e017f1680684f5702"}}}}}}
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "evole-e2898",
+                    "appId": "1:829235342119:android:990ab8d7afaa271d4f5702",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "evole-e2898",
+                    "configurations": {
+                        "android": "1:829235342119:android:990ab8d7afaa271d4f5702",
+                        "ios": "1:829235342119:ios:9e7e9da7125bf9274f5702",
+                        "macos": "1:829235342119:ios:9e7e9da7125bf9274f5702",
+                        "web": "1:829235342119:web:de1c7be57d9d53264f5702",
+                        "windows": "1:829235342119:web:4bfa0e017f1680684f5702"
+                    }
+                }
+            }
+        }
+    }
+}

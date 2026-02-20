@@ -1,20 +1,31 @@
 import 'package:evole/controller/userController.dart';
-import 'package:evole/screens/homepage.dart';
+import 'package:evole/routes.dart';
 import 'package:evole/screens/basic.dart';
+import 'package:evole/screens/home_page.dart';
+// import 'package:evole/screens/homepage.dart';
+// import 'package:evole/screens/home_page.dart';
+// // import 'package:evole/screens/basic.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'screens/login_screen.dart';
+// import 'screens/basic_info.dart';
 import 'theme.dart';
 import 'firebase_options.dart';
+import 'package:evole/screens/Giveguidance.dart';
+// import 'package:evole/screens/Requestaccept.dart';
+// import 'package:evole/screens/Request.dart';
+// import 'package:evole/screens/Counsellorprofile.dart';
+
+
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,      
   );
 
   Get.put(Usercontroller()); // register controller
@@ -31,6 +42,8 @@ class EvoleApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'EVOLE',
       theme: appTheme,
+        routes: routes,
+        
 
       home: StreamBuilder<User?>(
         stream: firebaseAuth.authStateChanges(),
@@ -55,10 +68,11 @@ class EvoleApp extends StatelessWidget {
               }
 
               if (controller.isProfileCompleted.value == true) {
-                return const Homepage();
+                return const HomePage();
               }
 
               return const BasicForm();
+              
             },
           );
         },
