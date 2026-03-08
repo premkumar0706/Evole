@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
 }
 
 class WelcomeEvoleScreen extends StatelessWidget {
+
   const WelcomeEvoleScreen({super.key});
 
   @override

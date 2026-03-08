@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:evole/screens/Giveguidance.dart';
+import 'package:evole/screens/request_accept.dart';
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback onClose;
@@ -153,6 +154,8 @@ class CustomDrawer extends StatelessWidget {
                   title: 'Councellor request',
                   onTap: () {
                     onClose();
+                      Navigator.pushNamed(
+                       context, GiveGuidancestoryScreen.routeName,);
                     // Navigate to request
                   },
                 ),
