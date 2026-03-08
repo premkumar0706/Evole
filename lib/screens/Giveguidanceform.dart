@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:evole/services/create_counsellor_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
@@ -205,78 +205,23 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
     );
   }
 
-  Future<void> createCounsellorRequest() async {
-    try {
-            final user = FirebaseAuth.instance.currentUser;
-print("current user: $user");
-        if (user == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Please login first"),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-      final callable =
-          FirebaseFunctions.instance.httpsCallable('createCounsellorRequest');
 
-      final result = await callable.call({
-        "basicDetail": {
-          "qualification": formData["qualification"],
-          "institute": formData["institute"],
-          "year": formData["year"],
-          "specialization": formData["specialization"],
-          "certificate": formData["certificate"],
-          "experience": formData["experience"],
-        },
-        "qualification": {
-          "category": formData["category"],
-          "mode": formData["mode"],
-          "days": formData["days"],
-          "timeSlot": formData["timeSlot"],
-        },
-        "counsellingDomain": {
-          "philosophy": formData["philosophy"],
-          "values": formData["values"],
-        },
-        "availability": {
-          "state": formData["locality"],
-          "address": formData["address"],
-          "city": formData["city"],
-        },
-        "approach": {
-          "photo": formData["Photo"],
-          "sessionUrl": formData["Url"],
-        }
-      });
+  Future<void> submitForm() async {
+    final result =
+        await GiveguidanceService.createCounsellorRequest(formData);
 
-
-    
-      if (result.data['success'] == true) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Data saved successfully!"),
-            backgroundColor: Colors.green,
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      } else {
-        print("Error from function: ${result.data['message']}");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Failed to save: ${result.data['message']}"),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      }
-    } catch (e) {
+    if (result['success'] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Data saved successfully!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Error: $e"),
+          content: Text(result['message'] ?? "Failed to save data."),
           backgroundColor: Colors.red,
-          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -314,16 +259,17 @@ print("current user: $user");
   Future<void> pickPhoto() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-    if (image != null) {
+    if (image != null) {  
       selectedPhoto = File(image.path);
 
       _controller("Photo").text = image.name;
       formData["Photo"] = image.path;
 
-      errorData["Photo"] = null;
+      errorData["Photo"] = null;  
       setState(() {});
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -383,8 +329,7 @@ print("current user: $user");
                         curve: Curves.ease,
                       );
                     } else {
-                      print("Submitting data: $formData");
-                      createCounsellorRequest();
+                      submitForm();
                     }
                     setState(() {});
                   },
