@@ -1,282 +1,284 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:open_filex/open_filex.dart';
 
-class UploadResourcesScreen extends StatelessWidget {
+class UploadResourcesScreen extends StatefulWidget {
   const UploadResourcesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      bottomNavigationBar: _bottomNav(),
-      body: SafeArea(
+  State<UploadResourcesScreen> createState() => _UploadResourcesScreenState();
+}
+
+class _UploadResourcesScreenState extends State<UploadResourcesScreen> {
+  List<File> files = [];
+  double progress = 0;
+  bool uploading = false;
+  String filter = "all";
+
+  Future pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg', 'svg', 'pdf'],
+    );
+
+    if (result == null) return;
+
+    List<File> selectedFiles = result.files
+        .where((f) => f.path != null)
+        .map((f) => File(f.path!))
+        .toList();
+
+    setState(() {
+      uploading = true;
+      progress = 0;
+    });
+
+    int totalSteps = selectedFiles.length * 10;
+    int currentStep = 0;
+
+    for (var file in selectedFiles) {
+      for (int i = 0; i < 10; i++) {
+        await Future.delayed(const Duration(milliseconds: 200));
+
+        currentStep++;
+
+        setState(() {
+          progress = currentStep / totalSteps;
+        });
+      }
+
+      files.add(file);
+    }
+
+    setState(() {
+      uploading = false;
+    });
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text("Successfully Uploaded")));
+  }
+
+  bool isImage(File file) {
+    String name = file.path.toLowerCase();
+
+    return name.endsWith("png") ||
+        name.endsWith("jpg") ||
+        name.endsWith("jpeg") ||
+        name.endsWith("svg");
+  }
+
+  List<File> get filteredFiles {
+    if (filter == "images") {
+      return files.where((f) => isImage(f)).toList();
+    }
+
+    if (filter == "docs") {
+      return files.where((f) => !isImage(f)).toList();
+    }
+
+    return files;
+  }
+
+  Widget segmentButton(String text, String value) {
+    bool selected = filter == value;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          filter = value;
+        });
+      },
+      child: Container(
+        alignment: Alignment.center,
+        margin: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: selected ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget uploadBox() {
+    return GestureDetector(
+      onTap: pickFile,
+      child: Container(
+        height: 140,
+        decoration: BoxDecoration(
+            color: const Color(0xffc7d1d8),
+            borderRadius: BorderRadius.circular(16)),
         child: Column(
-          children: [
-         
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                     
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                          size: 22,
-                        ),
-                      ),
-
-                      
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/quiz.svg',
-                              width: 18,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 6),
-                            const Text(
-                              "Counsellor",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      
-                      const SizedBox(width: 40),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      const CircleAvatar(
-                        radius: 36,
-                        backgroundColor: Colors.white,
-                      ),
-                      Container(
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.black, width: 2),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    "XYZ, M.Tech (IIT Kanpur)",
-                    style: TextStyle(color: Colors.white, fontSize: 13),
-                  ),
-                ],
-              ),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            CircleAvatar(
+              radius: 22,
+              backgroundColor: Colors.white,
             ),
-
-          
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
-                ),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 46,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E1B7A),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: const Text(
-                          "Upload Resources",
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 22),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
-                        _ResourceItem(
-                          icon: 'assets/icons/images.png',
-                          label: 'Documents',
-                        ),
-                        _ResourceItem(
-                          icon: 'assets/icons/images.png',
-                          label: 'Images',
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
-                        _ResourceItem(
-                          icon: 'assets/icons/video.png',
-                          label: 'Videos',
-                        ),
-                        _ResourceItem(
-                          icon: 'assets/icons/audio.png',
-                          label: 'Audios',
-                        ),
-                      ],
-                    ),
-                    const Spacer(flex: 1),
-                    const Text(
-                      "Want to connect with students,\nCreate Community!!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        height: 1.5, 
-                      ),
-                    ),
-                    const SizedBox(height: 36),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/icons/discord.png',
-                          width: 45,
-                        ),
-                        const SizedBox(width: 7),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            minimumSize: const Size(120, 36),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 6,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                          ),
-                          child: const Text(
-                            "Join at Discord",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            SizedBox(height: 12),
+            Text(
+              "Click to upload or drag and drop\nSVG, PNG, JPG or Pdf",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13, color: Colors.black87),
+            )
           ],
         ),
       ),
     );
   }
 
+  Widget progressCard() {
+    if (!uploading) return const SizedBox();
 
-  Widget _bottomNav() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-       
-        Divider(
-          height: 1,
-          thickness: 0.8,
-          color: const Color(0xFFD0CBCB),
-        ),
-
-        BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          backgroundColor: Colors.white,
-          items: [
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/home.1.svg',
-                width: 24,
-                height: 24,
-              ),
-              label: '',
+    return Container(
+      margin: const EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white24)),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+                color: Colors.blue.shade100,
+                borderRadius: BorderRadius.circular(6)),
+            child: const Text("Pdfs", style: TextStyle(fontSize: 10)),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Uploading...",
+                    style: TextStyle(fontSize: 13, color: Colors.white)),
+                const SizedBox(height: 6),
+                LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: Colors.grey,
+                ),
+              ],
             ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/icon.1.svg',
-                width: 24,
-                height: 24,
-              ),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/setting.1.svg',
-                width: 24,
-                height: 24,
-              ),
-              label: '',
-            ),
-          ],
-        ),
-      ],
+          ),
+          const SizedBox(width: 8),
+          Text("${(progress * 100).toInt()}%",
+              style: const TextStyle(color: Colors.white))
+        ],
+      ),
     );
   }
-}
 
-
-class _ResourceItem extends StatelessWidget {
-  final String icon;
-  final String label;
-
-  const _ResourceItem({
-    required this.icon,
-    required this.label,
-  });
+  Widget fileItem(File file) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              file.path.split('/').last,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+                color: Colors.yellow, borderRadius: BorderRadius.circular(4)),
+            child: GestureDetector(
+              onTap: () {
+                OpenFilex.open(file.path);
+              },
+              child: const Text("View",
+                  style: TextStyle(fontSize: 12, color: Colors.black)),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+                color: Colors.red, borderRadius: BorderRadius.circular(4)),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  files.remove(file);
+                });
+              },
+              child: const Text("Delete",
+                  style: TextStyle(fontSize: 12, color: Colors.white)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.asset(
-          icon,
-          width: 44,
-          height: 44,
-          fit: BoxFit.contain,
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        const SizedBox(height: 6),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Text(
-            label,
-            style: const TextStyle(fontSize: 12),
-          ),
+        title: const Text(
+          "Give Guidance",
+          style: TextStyle(color: Colors.white),
         ),
-      ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
+          children: [
+            const Text(
+              "Upload Resources",
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            uploadBox(),
+            progressCard(),
+            const SizedBox(height: 28),
+            const Text(
+              "Attached Files",
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              height: 55,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: [
+                  Expanded(child: segmentButton("View All", "all")),
+                  Expanded(child: segmentButton("Images", "images")),
+                  Expanded(child: segmentButton("Documents", "docs")),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            ...filteredFiles.map((f) => fileItem(f)).toList()
+          ],
+        ),
+      ),
     );
   }
 }

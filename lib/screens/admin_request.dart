@@ -4,15 +4,14 @@ import 'package:evole/services/approve_counsellor_request.dart';
 
 class RequestsScreen extends StatefulWidget {
   const RequestsScreen({super.key});
-
+ static const String routeName = '/adminRequests';
   @override
   State<RequestsScreen> createState() => _RequestsScreenState();
 }
 
 class _RequestsScreenState extends State<RequestsScreen> {
   List<Map<String, dynamic>> requests = [];
-  bool loading = true;
-
+  bool loading = true; 
   @override
   void initState() {
     super.initState();
@@ -43,14 +42,16 @@ class _RequestsScreenState extends State<RequestsScreen> {
   Future<void> approveRequest(int index) async {
     String uid = requests[index]["uid"];
 
+  print("UID being sent: $uid");
+
     final result = await ApproveCounsellorRequestService.approveRequest(uid);
 
     if (result["success"] == true) {
       if (!mounted) return;
 
-      setState(() {
-        requests.removeAt(index); 
-      });
+setState(() {
+  requests[index]["status"] = "Approved";
+});
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Request Approved")),
