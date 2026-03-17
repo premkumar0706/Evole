@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:evole/screens/Giveguidance.dart';
 import 'package:evole/screens/request_accept.dart';
+import 'package:evole/screens/admin_request.dart';
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback onClose;
@@ -101,6 +102,16 @@ class CustomDrawer extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               children: [
+                 _drawerItem(
+                  icon: '', // You need to add this SVG
+                  title: 'Councellor request',
+                  onTap: () {
+                    onClose();
+                      Navigator.pushNamed(
+                       context, RequestsScreen.routeName,);
+                    // Navigate to request
+                  },
+                ),
                 _drawerItem(
                   icon: 'assets/icons/settings.svg',
                   title: 'Settings',
@@ -151,7 +162,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 _drawerItem(
                   icon: '', // You need to add this SVG
-                  title: 'Councellor request',
+                  title: 'Councellor req. Accept Screen',
                   onTap: () {
                     onClose();
                       Navigator.pushNamed(

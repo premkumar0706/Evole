@@ -1,7 +1,7 @@
 import 'package:evole/controller/userController.dart';
 import 'package:evole/routes.dart';
 import 'package:evole/screens/basic.dart';
-// import 'package:evole/screens/home_page.dart';
+import 'package:evole/screens/home_page.dart';
 // import 'package:evole/screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,7 +13,7 @@ import 'firebase_options.dart';
 // import 'package:evole/screens/Requestaccept.dart';
 // import 'package:evole/screens/Request.dart';
 // import 'package:evole/screens/Counsellorprofile.dart';
-import 'package:evole/screens/admin_request.dart';
+
 
 
 
@@ -65,8 +65,8 @@ class EvoleApp extends StatelessWidget {
               }
 
               if (controller.isProfileCompleted.value == true) {
-                // return const HomePage();
-                return const RequestsScreen();
+                return const HomePage();
+              
               }
 
               return const BasicForm();

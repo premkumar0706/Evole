@@ -232,6 +232,7 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
 
     if (currentStep == 0) {
       required = [
+          "name",
         "qualification",
         "institute",
         "year",
@@ -375,6 +376,8 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
         padding: const EdgeInsets.all(16),
         child: Column(children: [
           stepTitle("Qualifications"),
+              floatingField(label: "Name", fieldKey: "name"),
+
           floatingDropdown("Highest Qualification", "qualification",
               qualificationList, qOpen, () {
             qOpen = !qOpen;

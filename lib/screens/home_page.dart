@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'custom_drawer.dart';
 import 'package:evole/screens/Giveguidance.dart';
+import 'package:evole/screens/Seekguidance.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -299,12 +301,19 @@ class _HomePageState extends State<HomePage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                    if (title == 'Give Guidance') {
-                  Navigator.pushNamed(
-                    context,
-                    GiveGuidanceScreen.routeName,
-                  );
-                }
+                  if (title == 'Seek Guidance') {
+                    Navigator.pushNamed(
+                      context,
+                      SeekGuidanceScreen.routeName,
+                    );
+                  }
+
+                  if (title == 'Give Guidance') {
+                    Navigator.pushNamed(
+                      context,
+                      GiveGuidanceScreen.routeName,
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
