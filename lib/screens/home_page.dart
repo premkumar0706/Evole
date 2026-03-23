@@ -7,6 +7,7 @@ import 'package:evole/screens/Giveguidance.dart';
 import 'package:evole/screens/Seekguidance.dart';
 
 class HomePage extends StatefulWidget {
+    static const String routeName = "/home"; // ✅ ADD THIS
   const HomePage({super.key});
 
   @override

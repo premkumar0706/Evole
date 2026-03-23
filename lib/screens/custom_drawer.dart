@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:evole/screens/Giveguidance.dart';
 import 'package:evole/screens/request_accept.dart';
 import 'package:evole/screens/admin_request.dart';
+import 'package:evole/screens/Counsellor_list.dart';
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback onClose;
@@ -110,6 +111,16 @@ class CustomDrawer extends StatelessWidget {
                       Navigator.pushNamed(
                        context, RequestsScreen.routeName,);
                     // Navigate to request
+                  },
+                ),
+                 _drawerItem(
+                  icon: '', 
+                  title: 'Councellor List',
+                  onTap: () {
+                    onClose();
+                      Navigator.pushNamed(
+                       context, CounselorListScreen.routeName,);
+                    
                   },
                 ),
                 _drawerItem(

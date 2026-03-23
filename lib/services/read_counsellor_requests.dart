@@ -7,24 +7,30 @@ class ReadCounsellorRequestsService {
       QuerySnapshot snap =
           await FirebaseFirestore.instance.collection("Requests").get();
 
-      for (var doc in snap.docs) {
-        final data = doc.data() as Map<String, dynamic>;
+for (var doc in snap.docs) {
+  final data = doc.data() as Map<String, dynamic>;
 
-        Map<String, dynamic>? basic;
+  final basic =
+      Map<String, dynamic>.from(data["basicDetail"] ?? {});
+  final qualification =
+      Map<String, dynamic>.from(data["qualification"] ?? {});
+  final domain =
+      Map<String, dynamic>.from(data["counsellingDomain"] ?? {});
+  final availability =
+      Map<String, dynamic>.from(data["availability"] ?? {});
+  final approach =
+      Map<String, dynamic>.from(data["approach"] ?? {});
 
-        if (data["basicDetail"] is Map) {
-          basic = Map<String, dynamic>.from(data["basicDetail"]);
-        }
+  counsellorRequests.add({
+    "uid": data["uid"],
 
-        counsellorRequests.add({
-          "uid": data["uid"],
-          "name": basic?["name"] ?? "",
-          "college": basic?["institute"] ?? "",
-          "qualification": basic?["qualification"] ?? "",
-          "experience": basic?["experience"] ?? "",
-          "status": data["status"] ?? "Pending",
-        });
-      }
+    ...basic,          
+    ...qualification,   
+    ...domain,       
+    ...availability,   
+    ...approach,        
+  });
+}
 
       return counsellorRequests;
     } catch (e) {
