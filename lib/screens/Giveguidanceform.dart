@@ -1,9 +1,9 @@
 import 'package:evole/services/create_counsellor_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:evole/screens/home_page.dart';
 
 class GiveGuidanceForm extends StatefulWidget {
   const GiveGuidanceForm({super.key});
@@ -215,8 +215,18 @@ class _GiveGuidanceFormState extends State<GiveGuidanceForm> {
         const SnackBar(
           content: Text("Data saved successfully!"),
           backgroundColor: Colors.green,
+          duration: Duration(milliseconds: 300),
         ),
       );
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        HomePage.routeName,
+        (route) => false,
+      );
+    });
+
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

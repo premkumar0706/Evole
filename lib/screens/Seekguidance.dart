@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:evole/screens/Deepmodeform.dart';
 
 class SeekGuidanceScreen extends StatelessWidget {
   const SeekGuidanceScreen({super.key});

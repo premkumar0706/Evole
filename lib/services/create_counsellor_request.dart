@@ -19,6 +19,7 @@ class GiveguidanceService {
 
       final result = await callable.call({
         "basicDetail": {
+          "name": formData["name"],
           "qualification": formData["qualification"],
           "institute": formData["institute"],
           "year": formData["year"],
